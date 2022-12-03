@@ -26,11 +26,14 @@ def statesId(id):
             return render_template("9-states.html", states=states)
     return render_template("9-states.html")
 
+
 @app.teardown_appcontext
     """
     closes or deallocates the resource if it exists. 
     It is registered as a teardown_appcontext() handler.
     """
+
+
 def Teardown(exc):
     """ delete current SQLAlchemy session """
     storage.close()
