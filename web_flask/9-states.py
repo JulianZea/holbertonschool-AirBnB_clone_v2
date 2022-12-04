@@ -1,10 +1,8 @@
 #!/usr/bin/python3
-"""
-Your web application must be listening on 0.0.0.0, port 5000
-"""
+"""Initialize a Flask application with state_list, using the Storage"""
+from flask import Flask, render_template
 from models import storage
-from flask import Flask
-from flask import render_template
+from models.state import State
 
 
 app = Flask(__name__)
@@ -13,31 +11,27 @@ app.url_map.strict_slashes = False
 
 @app.route("/states")
 def states():
-    """display an html page sorted by name in list"""
-    states = storage.all("state")
+    """Displays an HTML page with a list of all States.
+    States are sorted by name.
+    """
+    states = storage.all("State")
     return render_template("9-states.html", states=states)
 
 
 @app.route("/states/<id>")
-def statesId(id):
-    """ display HTML page with information about whether <id> exists """
-    for states in storage.all("state"), values():
+def states_id(id):
+    """Displays an HTML page with info about <id>, if it exists."""
+    for states in storage.all("State").values():
         if states.id == id:
             return render_template("9-states.html", states=states)
     return render_template("9-states.html")
 
 
 @app.teardown_appcontext
-    """
-    closes or deallocates the resource if it exists. 
-    It is registered as a teardown_appcontext() handler.
-    """
-
-
-def Teardown(exc):
-    """ delete current SQLAlchemy session """
+def teardown(exc):
+    """Remove the current SQLAlchemy session."""
     storage.close()
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+if (__name__ == '__main__'):
+    app.run(host="0.0.0.0", port=5000)
